@@ -50,13 +50,17 @@ export default async function ProblemsPage() {
   const topics = Array.from(topicMap.entries()).sort(([, a], [, b]) => a.order - b.order);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 py-10 space-y-10">
 
-      {/* Page header */}
-      <div className="flex items-start justify-between gap-4">
+      {/* Header */}
+      <div className="flex items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Problems</h1>
-          <p className="text-sm text-muted-foreground mt-1">NeetCode 150 · Sorted by topic</p>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-foreground leading-none">
+            Problems
+          </h1>
+          <p className="text-sm text-muted-foreground mt-2 font-body">
+            NeetCode 150 · sorted by topic · {solved} solved
+          </p>
         </div>
         <AddCustomProblemDialog />
       </div>
@@ -65,34 +69,38 @@ export default async function ProblemsPage() {
       <StatsHeader stats={stats} />
 
       {/* Problem list */}
-      <div className="space-y-8">
-        {topics.map(([topic, { problems: topicProblems }]) => {
+      <div className="space-y-6">
+        {topics.map(([topic, { problems: topicProblems }], idx) => {
           const solvedInTopic = topicProblems.filter(p => upByProblemId.has(p.id)).length;
           const pct = Math.round((solvedInTopic / topicProblems.length) * 100);
 
           return (
             <section key={topic}>
               {/* Topic header */}
-              <div className="flex items-center gap-3 mb-3">
-                <h2 className="text-sm font-semibold text-foreground">{topic}</h2>
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-xs font-mono text-muted-foreground shrink-0">
-                  {solvedInTopic}/{topicProblems.length}
+              <div className="flex items-center gap-3 mb-2">
+                <span className="font-mono text-xs text-muted-foreground w-5 text-right shrink-0">
+                  {String(idx + 1).padStart(2, '0')}
                 </span>
+                <h2 className="font-display text-base font-semibold text-foreground leading-none">
+                  {topic}
+                </h2>
+                <div className="flex-1 h-px bg-border" />
                 {pct > 0 && (
-                  <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden shrink-0">
+                  <div className="w-16 h-1 rounded-full bg-muted overflow-hidden shrink-0">
                     <div
                       className="h-full rounded-full bg-primary transition-all"
                       style={{
                         width: `${pct}%`,
-                        boxShadow: pct > 0 ? '0 0 8px oklch(0.72 0.20 145 / 0.5)' : undefined,
+                        boxShadow: '0 0 6px oklch(0.72 0.20 145 / 0.6)',
                       }}
                     />
                   </div>
                 )}
+                <span className="text-xs font-mono text-muted-foreground shrink-0">
+                  {solvedInTopic}/{topicProblems.length}
+                </span>
               </div>
 
-              {/* Problems */}
               <div className="rounded-xl border border-border bg-card px-4 py-1">
                 {topicProblems.map(p => (
                   <ProblemRow

@@ -5,33 +5,33 @@ const statConfigs = [
     key: 'solved' as const,
     label: 'Solved',
     sub: 'of 150 NeetCode',
-    color: 'text-primary',
-    glow: 'shadow-[0_0_20px_oklch(0.72_0.20_145/0.12)]',
-    accent: 'border-primary/20',
+    numColor: 'text-primary',
+    glowColor: 'oklch(0.72 0.20 145 / 0.10)',
+    borderColor: 'oklch(0.72 0.20 145 / 0.18)',
   },
   {
     key: 'tracking' as const,
     label: 'Tracking',
     sub: 'in review queue',
-    color: 'text-sky-400',
-    glow: 'shadow-[0_0_20px_oklch(0.6_0.18_230/0.12)]',
-    accent: 'border-sky-500/20',
+    numColor: 'text-sky-400',
+    glowColor: 'oklch(0.60 0.18 230 / 0.10)',
+    borderColor: 'oklch(0.60 0.18 230 / 0.18)',
   },
   {
     key: 'graduated' as const,
     label: 'Graduated',
     sub: 'long-term memory',
-    color: 'text-violet-400',
-    glow: 'shadow-[0_0_20px_oklch(0.6_0.22_280/0.12)]',
-    accent: 'border-violet-500/20',
+    numColor: 'text-violet-400',
+    glowColor: 'oklch(0.60 0.22 280 / 0.10)',
+    borderColor: 'oklch(0.60 0.22 280 / 0.18)',
   },
   {
     key: 'streak' as const,
     label: 'Streak',
     sub: (longest: number) => `longest: ${longest} days`,
-    color: 'text-amber-400',
-    glow: 'shadow-[0_0_20px_oklch(0.78_0.18_80/0.12)]',
-    accent: 'border-amber-500/20',
+    numColor: 'text-amber-400',
+    glowColor: 'oklch(0.78 0.18 80 / 0.10)',
+    borderColor: 'oklch(0.78 0.18 80 / 0.18)',
   },
 ];
 
@@ -48,15 +48,19 @@ export function StatsHeader({ stats }: { stats: Stats }) {
       {statConfigs.map((cfg) => (
         <div
           key={cfg.key}
-          className={`rounded-xl border ${cfg.accent} bg-card p-4 transition-all hover:border-opacity-60 ${cfg.glow}`}
+          className="rounded-xl bg-card p-5 transition-all"
+          style={{
+            border: `1px solid ${cfg.borderColor}`,
+            boxShadow: `0 0 28px ${cfg.glowColor}`,
+          }}
         >
-          <p className={`text-3xl font-bold font-mono tracking-tight ${cfg.color}`}>
+          <p className={`font-display text-4xl font-bold leading-none tracking-tight ${cfg.numColor}`}>
             {values[cfg.key]}
           </p>
-          <p className="text-sm font-medium text-foreground mt-1">{cfg.label}</p>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-sm font-medium text-foreground mt-2 font-body">{cfg.label}</p>
+          <p className="text-xs text-muted-foreground mt-0.5 font-body">
             {cfg.key === 'streak'
-              ? cfg.sub(stats.streak.longest)
+              ? (cfg.sub as (n: number) => string)(stats.streak.longest)
               : cfg.sub as string}
           </p>
         </div>

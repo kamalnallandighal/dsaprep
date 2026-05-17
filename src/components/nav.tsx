@@ -18,23 +18,16 @@ export function Nav({ email }: { email: string }) {
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-        {/* Left: brand + links */}
         <div className="flex items-center gap-6">
-          <Link href="/today" className="flex items-center gap-2 group">
-            <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center transition-all group-hover:shadow-[0_0_12px_oklch(0.72_0.20_145/0.5)]">
-              <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 text-primary-foreground" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
-              </svg>
-            </div>
-            <span className="font-bold text-sm tracking-tight">DSA Prep</span>
+          <Link href="/today" className="font-display font-bold text-base tracking-tight text-foreground hover:text-primary transition-colors cursor-pointer">
+            DSA Prep
           </Link>
-
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5">
             <Link
               href="/today"
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md text-sm transition-all cursor-pointer font-body ${
                 pathname === '/today'
-                  ? 'bg-primary/10 text-primary'
+                  ? 'bg-primary/10 text-primary font-medium'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
@@ -42,9 +35,9 @@ export function Nav({ email }: { email: string }) {
             </Link>
             <Link
               href="/problems"
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md text-sm transition-all cursor-pointer font-body ${
                 pathname === '/problems'
-                  ? 'bg-primary/10 text-primary'
+                  ? 'bg-primary/10 text-primary font-medium'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
@@ -52,15 +45,13 @@ export function Nav({ email }: { email: string }) {
             </Link>
           </div>
         </div>
-
-        {/* Right: email + logout */}
         <div className="flex items-center gap-3">
           <span className="hidden sm:block text-xs text-muted-foreground font-mono truncate max-w-[180px]">
             {email}
           </span>
           <button
             onClick={handleLogout}
-            className="text-xs text-muted-foreground hover:text-foreground border border-border hover:border-foreground/20 rounded-md px-3 py-1.5 transition-all cursor-pointer"
+            className="text-xs text-muted-foreground hover:text-foreground border border-border hover:border-foreground/20 rounded-md px-3 py-1.5 transition-all cursor-pointer font-body"
           >
             Logout
           </button>

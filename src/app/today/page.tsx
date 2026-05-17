@@ -37,66 +37,54 @@ export default async function TodayPage() {
   const overflow = totalDue - visible.length;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-10">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-baseline gap-3">
-          <h1 className="text-2xl font-bold tracking-tight">Today</h1>
-          {totalDue > 0 && (
-            <span className="text-sm font-mono text-muted-foreground">
-              {totalDue} due
-            </span>
-          )}
-        </div>
-        {totalDue > 0 && (
-          <p className="text-sm text-muted-foreground mt-1">
-            Work through your review queue — take it one at a time.
+        <h1 className="font-display text-4xl font-bold tracking-tight text-foreground leading-none">
+          Today
+        </h1>
+        {totalDue > 0 ? (
+          <p className="text-sm text-muted-foreground mt-2 font-body">
+            <span className="font-mono text-foreground">{totalDue}</span> problems due · work through them one at a time
           </p>
+        ) : (
+          <p className="text-sm text-muted-foreground mt-2 font-body">Your review queue is empty</p>
         )}
       </div>
 
       {totalDue === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 ring-1 ring-primary/20">
-            <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-primary" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <h2 className="text-lg font-semibold mb-2">All caught up!</h2>
-          <p className="text-sm text-muted-foreground mb-6 max-w-xs">
-            Nothing due today. Keep the streak alive by marking more problems solved.
+        <div className="rounded-xl border border-border bg-card p-10 text-center">
+          <p className="font-display text-2xl font-bold text-foreground mb-1">All caught up.</p>
+          <p className="text-sm text-muted-foreground mb-6 font-body">
+            Nothing due today. Mark more problems solved to build your queue.
           </p>
           <Link
             href="/problems"
-            className="text-sm font-medium text-primary hover:opacity-80 transition-opacity cursor-pointer"
+            className="text-sm font-medium text-primary hover:opacity-80 transition-opacity cursor-pointer font-body"
           >
             Browse problems →
           </Link>
         </div>
       ) : (
         <div className="space-y-3">
-          {visible.map((row, i) => (
-            <div
-              key={row.id}
-              className="rounded-xl border border-border bg-card p-5 space-y-4 card-hover"
-              style={{ animationDelay: `${i * 50}ms` }}
-            >
-              {/* Problem title + badge */}
+          {visible.map((row) => (
+            <div key={row.id} className="rounded-xl border border-border bg-card p-5 space-y-4 card-hover">
+              {/* Title row */}
               <div className="flex items-start justify-between gap-3">
                 <a
                   href={row.problems.leetcode_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-sm text-foreground hover:text-primary transition-colors leading-snug cursor-pointer"
+                  className="font-display font-semibold text-base text-foreground hover:text-primary transition-colors leading-snug cursor-pointer"
                 >
                   {row.problems.title}
                 </a>
                 <DifficultyBadge difficulty={row.problems.difficulty} />
               </div>
 
-              {/* Topic + stage */}
+              {/* Meta row */}
               <div className="flex items-center gap-4">
-                <span className="text-xs text-muted-foreground">{row.problems.topic}</span>
+                <span className="text-xs text-muted-foreground font-body">{row.problems.topic}</span>
                 <div className="flex items-center gap-2">
                   <StageIndicator stage={row.stage} />
                   <span className="text-xs font-mono text-muted-foreground">
@@ -110,11 +98,9 @@ export default async function TodayPage() {
           ))}
 
           {overflow > 0 && (
-            <div className="text-center py-3">
-              <p className="text-sm text-muted-foreground font-mono">
-                +{overflow} more rolling over to tomorrow
-              </p>
-            </div>
+            <p className="text-center text-xs text-muted-foreground font-mono py-2">
+              +{overflow} more rolling over to tomorrow
+            </p>
           )}
         </div>
       )}
