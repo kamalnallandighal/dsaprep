@@ -34,12 +34,12 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className="h-full dark">
+      <body className="min-h-full flex flex-col bg-background antialiased">
         {user && <Nav email={email} />}
         {user && <TimezoneSetter profileTz={profileTz} />}
         <main className="flex-1">{children}</main>
-        <Toaster />
+        <Toaster theme="dark" />
       </body>
     </html>
   );
