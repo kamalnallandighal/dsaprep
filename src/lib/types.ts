@@ -1,4 +1,4 @@
-export type Rating = 'again' | 'good' | 'easy';
+export type Rating = 'again' | 'good' | 'easy' | 'mastered';
 
 export type Problem = {
   id: number;
@@ -25,6 +25,7 @@ export type UserProblem = {
   first_solved_at: string;
   added_at: string;
   notes: string | null;
+  graduation_source: 'natural' | 'mastered' | null;
 };
 
 export type Stats = {

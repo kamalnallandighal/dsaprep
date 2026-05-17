@@ -18,17 +18,18 @@ export default async function TodayPage() {
   const tz = profile?.timezone ?? 'America/Los_Angeles';
   const today = todayInTz(tz);
 
+  // Include learning problems due today AND graduated problems due today (calibration reviews)
   const { data: dueRows } = await supabase
     .from('user_problems')
-    .select('id, stage, added_at, problem_id, next_due_date, problems(*)')
+    .select('id, stage, status, added_at, problem_id, next_due_date, problems(*)')
     .eq('user_id', user.id)
-    .eq('status', 'learning')
+    .or('status.eq.learning,status.eq.graduated')
     .lte('next_due_date', today)
     .order('next_due_date', { ascending: true })
     .order('added_at', { ascending: true });
 
   type DueRow = {
-    id: number; stage: number; added_at: string;
+    id: number; stage: number; status: string; added_at: string;
     problem_id: number; next_due_date: string; problems: Problem;
   };
   const allDue = (dueRows ?? []) as unknown as DueRow[];
@@ -69,6 +70,13 @@ export default async function TodayPage() {
         <div className="space-y-3">
           {visible.map((row) => (
             <div key={row.id} className="rounded-xl border border-border bg-card p-5 space-y-4 card-hover">
+              {/* Calibration check badge — only shown for graduated problems surfacing for review */}
+              {row.status === 'graduated' && (
+                <p className="text-xs text-muted-foreground font-body">
+                  Calibration check
+                </p>
+              )}
+
               {/* Title row */}
               <div className="flex items-start justify-between gap-3">
                 <a
@@ -93,7 +101,11 @@ export default async function TodayPage() {
                 </div>
               </div>
 
-              <ReviewButtons userProblemId={row.id} />
+              <ReviewButtons
+                userProblemId={row.id}
+                stage={row.stage}
+                status={row.status as 'learning' | 'graduated'}
+              />
             </div>
           ))}
 

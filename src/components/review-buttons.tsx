@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { reviewProblem } from '@/app/today/actions';
+import { reviewProblem, markMastered } from '@/app/today/actions';
 import type { Rating } from '@/lib/types';
 
 const buttons: { rating: Rating; label: string; style: string }[] = [
@@ -25,7 +25,13 @@ const buttons: { rating: Rating; label: string; style: string }[] = [
   },
 ];
 
-export function ReviewButtons({ userProblemId }: { userProblemId: number }) {
+type Props = {
+  userProblemId: number;
+  stage: number;
+  status: 'learning' | 'graduated';
+};
+
+export function ReviewButtons({ userProblemId, stage, status }: Props) {
   const [isPending, startTransition] = useTransition();
   const [submitted, setSubmitted] = useState(false);
 
@@ -37,18 +43,42 @@ export function ReviewButtons({ userProblemId }: { userProblemId: number }) {
     });
   }
 
+  function handleMastered() {
+    if (submitted) return;
+    setSubmitted(true);
+    startTransition(async () => {
+      await markMastered(userProblemId);
+    });
+  }
+
+  const showMasteredLink = stage >= 2 && status === 'learning';
+
   return (
-    <div className="flex gap-2 w-full">
-      {buttons.map(({ rating, label, style }) => (
-        <button
-          key={rating}
-          onClick={() => handleReview(rating)}
-          disabled={isPending || submitted}
-          className={`flex-1 min-h-[44px] rounded-lg text-sm font-semibold transition-all active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${style}`}
-        >
-          {isPending && submitted ? '…' : label}
-        </button>
-      ))}
+    <div className="space-y-2">
+      <div className="flex gap-2 w-full">
+        {buttons.map(({ rating, label, style }) => (
+          <button
+            key={rating}
+            onClick={() => handleReview(rating)}
+            disabled={isPending || submitted}
+            className={`flex-1 min-h-[44px] rounded-lg text-sm font-semibold transition-all active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${style}`}
+          >
+            {isPending && submitted ? '…' : label}
+          </button>
+        ))}
+      </div>
+
+      {showMasteredLink && (
+        <div className="flex justify-center">
+          <button
+            onClick={handleMastered}
+            disabled={isPending || submitted}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer py-1 px-2"
+          >
+            Mastered →
+          </button>
+        </div>
+      )}
     </div>
   );
 }
