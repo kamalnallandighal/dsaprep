@@ -28,6 +28,8 @@ const TOPIC_ORDER: Record<string, number> = {
   'Advanced Graphs': 12,
   '1-D DP': 13,
   '2-D DP': 14,
+  '1-D Dynamic Programming': 13,
+  '2-D Dynamic Programming': 14,
   Greedy: 15,
   Intervals: 16,
   'Math & Geometry': 17,
