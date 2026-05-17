@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { reviewProblem, markMastered } from '@/app/today/actions';
-import type { Rating } from '@/lib/types';
+import type { Rating } from '@/lib/scheduler';
 
 const buttons: { rating: Rating; label: string; style: string }[] = [
   {
